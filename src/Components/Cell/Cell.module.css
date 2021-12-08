@@ -1,0 +1,8 @@
+.cell {
+  box-sizing: border-box;
+  height: 6rem;
+  width: 6rem;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(221, 208, 208);
+  transition: all 1s;
+}
