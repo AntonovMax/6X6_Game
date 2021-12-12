@@ -2,7 +2,7 @@ import style from './Cell.module.css'
 
 function Cell({ el, index, openCell }) {
   return (
-    <div onClick={(event) => openCell(event)}
+    <div onClick={openCell}
       className={`${style.cell} ${el}`}
       key={index}
       id={`${index}${el}`}>

@@ -6,14 +6,15 @@ import style from './GameField.module.css'
 function GameField({ game_arr }) {
 
   const [paire, setPaire] = useState([])
+  const [cells, setCells] = useState(game_arr)
 
-  const openCell = (event) => {
+  console.log('GameField');
+
+  function openCell (event) {
     if (paire.length > 0 && paire[0] != event.target.id) {
-      const color = event.target.id.match(/[a-z]/gi).join('') // матчим цвет из id
       event.target.style.backgroundColor = event.target.id.match(/[a-z]/gi).join('')
       setPaire([...paire, event.target.id])
     } else if (paire.length === 0) {
-      const color = event.target.id.match(/[a-z]/gi).join('') // матчим цвет из id
       event.target.style.backgroundColor = event.target.id.match(/[a-z]/gi).join('')
       setPaire([...paire, event.target.id])
     }
@@ -32,19 +33,19 @@ function GameField({ game_arr }) {
 
 
 
-        if (paire[0] === paire[1]) {
+        if (paire[0].match(/[a-z]/gi).join('') === paire[1].match(/[a-z]/gi).join('')) {
           for (let i = 0; i < 2; i++) {
             const cell = document.getElementById(paire[i])
-
-            cell.style.backgroundColor = 'red'
-            cell.removeEventListener('click', (event) => openCell(event))
+          
+            cell.style.backgroundColor = 'transparent'
+            cell.style.border = '1px solid transparent'
+            
           }
         } else if (paire[0].match(/[a-z]/gi).join('') != paire[1].match(/[a-z]/gi).join('')) {
           for (let i = 0; i < 2; i++) {
             const cell = document.getElementById(paire[i])
 
             cell.style.backgroundColor = 'white'
-            cell.removeEventListener('click', (event) => openCell(event))
           }
         }
 
@@ -57,7 +58,7 @@ function GameField({ game_arr }) {
 
   return (
     <div className={style.wrapper}>
-      {game_arr.map((el, index) => {
+      {cells.map((el, index) => {
         return (
           <Cell el={el} key={index} index={index} openCell={openCell} />
         )
