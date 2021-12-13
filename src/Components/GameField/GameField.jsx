@@ -3,55 +3,48 @@ import { useState, useEffect } from 'react'
 import Cell from '../Cell/Cell'
 import style from './GameField.module.css'
 
-function GameField({ game_arr }) {
+function GameField({ game_arr }) { // сгенерированный на верхнем уровне массив случайных цветов передается через пропсы
 
-  const [paire, setPaire] = useState([])
-  const [cells, setCells] = useState(game_arr)
+  const [paire, setPaire] = useState([]) // состояние двух выбранных ячеек
+  const [cells, setCells] = useState(game_arr) // изменяемое состояние игрового массива. Отгаданным клеткам присваивается значение 'closed'
 
-  console.log('GameField');
-
-  function openCell (event) {
-    if (paire.length > 0 && paire[0] != event.target.id) {
-      event.target.style.backgroundColor = event.target.id.match(/[a-z]/gi).join('')
+  function openCell(event) {
+    if (paire.length > 0 && paire[0] != event.target.id) { // если открыта одна ячейка и она не нажата дважды
+      event.target.style.backgroundColor = event.target.id.match(/[a-z]/gi).join('') // устанавливаем ее фон, взяв цвет из ID в котором соеденины индекс ячейки в массиве и цвет
       setPaire([...paire, event.target.id])
-    } else if (paire.length === 0) {
+    } else if (paire.length === 0) { // открытие первой ячейки из пары
       event.target.style.backgroundColor = event.target.id.match(/[a-z]/gi).join('')
       setPaire([...paire, event.target.id])
     }
 
   }
 
-  useEffect(() => {
+  useEffect(() => { // хук срабатывает через секунду при каждом изменении массива пар
 
     setTimeout(() => {
-      
-      if (paire.length === 2) {
+
+      if (paire.length === 2) { // если в массиве два значения, то происходит проверка
         console.log(paire)
-        // const cellOne = document.getElementById(paire[0])
-        // const cellTwe = document.getElementById(paire[1])
 
+        if (paire[0].match(/[a-z]/gi).join('') === paire[1].match(/[a-z]/gi).join('')) { // если цвета совпадают
 
-
-
-        if (paire[0].match(/[a-z]/gi).join('') === paire[1].match(/[a-z]/gi).join('')) {
+          setCells(cells.map((el) => { // находим пару в общем массиве и меняем ее значение на 'closed'
+            if ((el === paire[0].match(/[a-z]/gi).join('')) || (el === paire[1].match(/[a-z]/gi).join(''))) {
+              return 'closed'
+            } else {
+              return el
+            }
+          }))
+        } else if (paire[0].match(/[a-z]/gi).join('') != paire[1].match(/[a-z]/gi).join('')) { // если цвета не совпадают, возвращаем клеткам первоначальное значение
           for (let i = 0; i < 2; i++) {
             const cell = document.getElementById(paire[i])
-          
-            cell.style.backgroundColor = 'transparent'
-            cell.style.border = '1px solid transparent'
-            
-          }
-        } else if (paire[0].match(/[a-z]/gi).join('') != paire[1].match(/[a-z]/gi).join('')) {
-          for (let i = 0; i < 2; i++) {
-            const cell = document.getElementById(paire[i])
-
             cell.style.backgroundColor = 'white'
           }
         }
 
         setPaire([])
       }
-    }, 1000)
+    }, 300)
 
   }, [paire])
 
